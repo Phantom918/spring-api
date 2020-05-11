@@ -6,12 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * @Description spring 工具项目
  * @author lei.tan
+ * @Description spring 工具项目
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@MapperScan("com.leitan.springapi.dao")
+@MapperScan(basePackages = "com.leitan.springapi.dao")
 public class SpringApiApplication {
 
     public static void main(String[] args) {

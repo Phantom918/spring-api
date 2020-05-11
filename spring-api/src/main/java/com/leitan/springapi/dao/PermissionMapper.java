@@ -2,9 +2,12 @@ package com.leitan.springapi.dao;
 
 import com.github.pagehelper.Page;
 import com.leitan.springapi.entity.Permission;
-import com.leitan.springapi.entity.Role;
 import com.leitan.springapi.entity.RolePermission;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,7 +15,7 @@ import java.util.List;
  * @Description 权限 mapper
  * @author tanlei
  */
-@Mapper
+@Repository
 public interface PermissionMapper {
 
     /**

@@ -2,10 +2,8 @@ package com.leitan.springapi.dao;
 
 import com.github.pagehelper.Page;
 import com.leitan.springapi.entity.Role;
-import com.leitan.springapi.entity.User;
 import org.apache.ibatis.annotations.*;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -13,7 +11,7 @@ import java.util.List;
  * @author tanlei
  * @Description 角色 mapper
  */
-@Mapper
+@Repository
 public interface RoleMapper {
 
     /**

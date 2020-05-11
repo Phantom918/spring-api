@@ -1,11 +1,13 @@
 package com.leitan.springapi.config;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -40,8 +42,8 @@ public class AuthAccessDecisionManager implements AccessDecisionManager {
                     }
                 }
             }
-
-            throw new AccessDeniedException("当前访问没有权限!");
+            ((FilterInvocation) object).getResponse().setStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
+            throw new AccessDeniedException("当前资源无访问权限!");
         }
 
     }

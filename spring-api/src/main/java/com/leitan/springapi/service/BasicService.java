@@ -110,7 +110,7 @@ public interface BasicService {
      * @param user
      * @return
      */
-    Page<User> selectUsersByPage(Integer pageNum, Integer pageSize, User user);
+    List<User> selectUsersByPage(Integer pageNum, Integer pageSize, User user);
 
     /**
      * 条件分页查询角色

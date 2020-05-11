@@ -1,17 +1,17 @@
 package com.leitan.springapi.dao;
 
-import com.github.pagehelper.Page;
-import com.leitan.springapi.entity.Permission;
 import com.leitan.springapi.entity.User;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * @author tanlei
+ * @Description @Repository 注解，用于标记是数据访问 Bean 对象。在 MyBatis 的接口，实际非必须，只是为了避免在 Service 中，@Autowired 注入时无需报警。
  * @Description 用户 mapper
  */
-@Mapper
+@Repository
 public interface UserMapper {
 
     /**
@@ -65,6 +65,7 @@ public interface UserMapper {
 
     /**
      * 分页查询用户
+     *
      * @param user
      * @return
      */
@@ -74,12 +75,12 @@ public interface UserMapper {
             "  <if test='id != null and id != &quot;&quot;'> and id = #{id} </if>" +
             "  <if test='username != null and username != &quot;&quot;'> and username like CONCAT('%', #{username}, '%') </if>" +
             "  <if test='nickname != null and nickname != &quot;&quot;'> and nickname like CONCAT('%', #{nickname}, '%') </if>" +
-            "  <if test='sex != null and sex != &quot;&quot;'> and sex = #{username} </if>" +
+            "  <if test='sex != null and sex != &quot;&quot;'> and sex = #{sex} </if>" +
             "  <if test='enable != null and enable != &quot;&quot;'> and enable = #{enable} </if>" +
             "</where>" +
             " order by id asc" +
             "</script>")
-    Page<User> selectByUser(User user);
+    List<User> selectByUser(User user);
 
     /**
      * 根据 id 修改用户
@@ -87,7 +88,18 @@ public interface UserMapper {
      * @param user
      * @return
      */
-    @Update("update user set username = #{username}, password = #{password}, nickname = #{nickname}, sex = #{sex}, enable = #{enable}, image = #{image} where id = #{id}")
+    @Update("<script>" +
+            "update user" +
+            "<set>" +
+            "  <if test='username != null'> username=#{username}, </if> " +
+            "  <if test='password != null'> password=#{password}, </if> " +
+            "  <if test='nickname != null'> nickname=#{nickname}, </if> " +
+            "  <if test='sex != null'> sex=#{sex}, </if> " +
+            "  <if test='enable != null'> enable=#{enable}, </if> " +
+            "  <if test='image != null'> image=#{image}, </if> " +
+            "</set>" +
+            "where id = #{id} " +
+            "</script>")
     int updateUser(User user);
 
     /**

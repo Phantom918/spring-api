@@ -1,5 +1,7 @@
 package com.leitan.springapi.service;
 
+import com.leitan.springapi.entity.AjaxResponseBody;
+
 /**
  * @Description 权限认证相关
  * @Author lei.tan
@@ -14,6 +16,6 @@ public interface AuthService {
      * @param password
      * @return
      */
-    String login(String username, String password);
+    AjaxResponseBody login(String username, String password);
 
 }

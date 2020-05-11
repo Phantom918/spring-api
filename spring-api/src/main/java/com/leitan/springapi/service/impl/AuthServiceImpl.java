@@ -1,9 +1,13 @@
 package com.leitan.springapi.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.leitan.springapi.entity.AjaxResponseBody;
 import com.leitan.springapi.service.AuthService;
 import com.leitan.springapi.utils.JwtTokenUtil;
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,17 +42,26 @@ public class AuthServiceImpl implements AuthService {
     @Qualifier("userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
     @Override
-    public String login(String username, String password) {
+    public AjaxResponseBody login(String username, String password) {
+        // 权鉴
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        // 设置上下文
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // 获取资源
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        String token = jwtTokenUtil.generateToken(userDetails);
-        return token;
+
+        // 生成 token
+        String token = JwtTokenUtil.generateToken(userDetails);
+
+        // 组装消息
+        AjaxResponseBody responseBody = AjaxResponseBody.success();
+        responseBody.setToken(token);
+
+        return responseBody;
     }
 
 }

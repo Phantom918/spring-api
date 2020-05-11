@@ -8,9 +8,11 @@ import com.leitan.springapi.entity.Role;
 import com.leitan.springapi.entity.User;
 import com.leitan.springapi.service.BasicService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.List;
 @Service
 public class BasicServiceImpl implements BasicService {
 
-    @Resource
+    @Autowired
     private UserMapper userMapper;
 
     @Resource
@@ -41,6 +43,7 @@ public class BasicServiceImpl implements BasicService {
 
     @Override
     public boolean addUser(User user) {
+        //DigestUtils.md5DigestAsHex(user.getPassword().getBytes())
         int count = userMapper.addUser(user);
         return count == 1;
     }
@@ -116,9 +119,9 @@ public class BasicServiceImpl implements BasicService {
     }
 
     @Override
-    public Page<User> selectUsersByPage(Integer pageNum, Integer pageSize, User user) {
+    public List<User> selectUsersByPage(Integer pageNum, Integer pageSize, User user) {
         PageHelper.startPage(pageNum, pageSize);
-        Page<User> users = userMapper.selectByUser(user);
+        List<User> users = userMapper.selectByUser(user);
         for (int i = 0; i < users.size(); i++) {
             List<Role> roles = roleMapper.getRolesByUserId(users.get(i).getId());
             users.get(i).setAuthorities(roles);

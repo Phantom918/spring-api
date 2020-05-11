@@ -3,7 +3,7 @@ package com.leitan.springapi.dao;
 import com.leitan.springapi.entity.UserRole;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @Author lei.tan
  * @Date 2019/12/29 20:57
  */
-@Mapper
+@Repository
 public interface UserRoleMapper {
 
     /**

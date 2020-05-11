@@ -9,9 +9,6 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/spring?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
     username: root
     password: hjXL327918
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      initial-size: 2
 #    type: com.zaxxer.hikari.HikariDataSource
 #    hikari:
 #        maximum-pool-size: 100
@@ -19,6 +16,10 @@ spring:
 
 pagehelper:
   helper-dialect: mysql
+  # 分页合理化参数默认false。设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时）查询最后一页
+  reasonable: true
+  # 默认值为 false，设置为 true 如果 pageSize=0 或者 RowBounds.limit = 0 查询出全部的结果
+  page-size-zero: true
 # 可将 com.leitan.springapi.dao 包下的接口的SQL语句输出到控制台
 logging:
   level:

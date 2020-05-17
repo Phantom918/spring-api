@@ -41,10 +41,10 @@ public interface BasicService {
     /**
      * 删除用户
      *
-     * @param id
+     * @param ids 用户id集合
      * @return
      */
-    boolean deleteUser(Long id);
+    boolean deleteUsers(List<Long> ids);
 
     /**
      * 批量删除角色
@@ -120,7 +120,7 @@ public interface BasicService {
      * @param role
      * @return
      */
-    Page<Role> selectRolesByPage(Integer pageNum, Integer pageSize, Role role);
+    List<Role> selectRolesByPage(Integer pageNum, Integer pageSize, Role role);
 
     /**
      * 条件分页查询权限
@@ -130,7 +130,12 @@ public interface BasicService {
      * @param permission
      * @return
      */
-    Page<Permission> selectPermissionsByPage(Integer pageNum, Integer pageSize, Permission permission);
+    List<Permission> selectPermissionsByPage(Integer pageNum, Integer pageSize, Permission permission);
 
-
+    /**
+     * 根据用户名和邮箱查询是否存在用户
+     * @param user
+     * @return
+     */
+    int getUserCount(User user);
 }

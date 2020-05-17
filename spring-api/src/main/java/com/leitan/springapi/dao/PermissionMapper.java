@@ -93,6 +93,6 @@ public interface PermissionMapper {
             "</where>" +
             " order by code asc" +
             "</script>")
-    Page<Permission> selectByPermission(Permission permission);
+    List<Permission> selectByPermission(Permission permission);
 
 }

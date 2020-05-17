@@ -53,6 +53,18 @@ public class AjaxResponseBody implements Serializable {
     }
 
     /**
+     * 成功
+     *
+     * @return
+     */
+    public static AjaxResponseBody success(String message) {
+        AjaxResponseBody responseBody = new AjaxResponseBody();
+        responseBody.setStatus(HttpStatus.OK.value());
+        responseBody.setMessage(message);
+        return responseBody;
+    }
+
+    /**
      * 无权限
      *
      * @return
@@ -63,6 +75,19 @@ public class AjaxResponseBody implements Serializable {
         responseBody.setMessage("无权限访问！");
         return responseBody;
     }
+
+    /**
+     * 入参异常
+     *
+     * @return
+     */
+    public static AjaxResponseBody parameterError() {
+        AjaxResponseBody responseBody = new AjaxResponseBody();
+        responseBody.setStatus(HttpStatus.BAD_REQUEST.value());
+        responseBody.setMessage("方法请求参数异常！");
+        return responseBody;
+    }
+
 
     public void setResult(Object result) {
         this.result = result;

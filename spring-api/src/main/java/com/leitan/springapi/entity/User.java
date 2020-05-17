@@ -30,6 +30,8 @@ public class User implements UserDetails, Serializable {
 
     private String image;
 
+    private String email;
+
     private List<Role> authorities;
 
     /**

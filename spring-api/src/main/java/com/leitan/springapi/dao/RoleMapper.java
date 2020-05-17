@@ -85,5 +85,5 @@ public interface RoleMapper {
             "</where>" +
             " order by id asc" +
             "</script>")
-    Page<Role> selectByRole(Role role);
+    List<Role> selectByRole(Role role);
 }

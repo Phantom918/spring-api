@@ -17,11 +17,15 @@ public interface UserMapper {
     /**
      * 根据 id 删除用户
      *
-     * @param id
+     * @param ids id 集合
      * @return
      */
-    @Delete("delete from user where id = #{id}")
-    int deleteUser(Long id);
+    @Delete("<script> delete delete user where id in " +
+            "   <foreach collection='ids' item='item' index='index' open='(' separator=',' close=')'>" +
+            "       #{item}" +
+            "   </foreach>" +
+            "</script>")
+    int deleteUsers(List<Long> ids);
 
     /**
      * 插入记录
@@ -29,7 +33,7 @@ public interface UserMapper {
      * @param user
      * @return
      */
-    @Insert("insert into user (username, password, nickname, sex, enable, image) values (#{username}, #{password}, #{nickname}, #{sex}, #{enable}, #{image})")
+    @Insert("insert into user (username, password, nickname, sex, enable, image, email) values (#{username}, #{password}, #{nickname}, #{sex}, #{enable}, #{image}, #{email})")
     int addUser(User user);
 
     /**
@@ -39,9 +43,9 @@ public interface UserMapper {
      * @return
      */
     @Insert("<script> " +
-            "insert into user(username, password, nickname, sex, enable, image) values" +
+            "insert into user(username, password, nickname, sex, enable, image, email) values" +
             "<foreach collection='users' item='item' index='index' separator=','>" +
-            "(#{username}, #{password}, #{nickname}, #{sex}, #{enable}, #{image})" +
+            "(#{username}, #{password}, #{nickname}, #{sex}, #{enable}, #{image}, #{email})" +
             "</foreach>" +
             "</script>")
     int addUsers(List<User> users);
@@ -77,6 +81,7 @@ public interface UserMapper {
             "  <if test='nickname != null and nickname != &quot;&quot;'> and nickname like CONCAT('%', #{nickname}, '%') </if>" +
             "  <if test='sex != null and sex != &quot;&quot;'> and sex = #{sex} </if>" +
             "  <if test='enable != null and enable != &quot;&quot;'> and enable = #{enable} </if>" +
+            "  <if test='email != null and enable != &quot;&quot;'> and email = #{email} </if>" +
             "</where>" +
             " order by id asc" +
             "</script>")
@@ -97,6 +102,7 @@ public interface UserMapper {
             "  <if test='sex != null'> sex=#{sex}, </if> " +
             "  <if test='enable != null'> enable=#{enable}, </if> " +
             "  <if test='image != null'> image=#{image}, </if> " +
+            "  <if test='email != null'> email=#{email}, </if> " +
             "</set>" +
             "where id = #{id} " +
             "</script>")
@@ -120,6 +126,7 @@ public interface UserMapper {
     @Select("select u.* from user u left join user_role ur on u.id = ur.user_id where ur.role_id = #{roleId}")
     List<User> getUserByRoleId(Long roleId);
 
+
     /**
      * 根据用户 id 禁用用户
      *
@@ -137,4 +144,22 @@ public interface UserMapper {
      */
     @Update("update user set enable = 1 where id = #{id}")
     int enableUser(long id);
+
+    /**
+     * 分页查询用户
+     *
+     * @param user
+     * @return
+     */
+    @Select("<script>" +
+            "select count(1) from user " +
+            "<where>" +
+            "  <if test='username != null and username != &quot;&quot;'> and username = #{username} </if>" +
+            "  <if test='email != null and enable != &quot;&quot;'> and email = #{email} </if>" +
+            "</where>" +
+            " order by id asc" +
+            "</script>")
+    int getUserCount(User user);
+
+
 }

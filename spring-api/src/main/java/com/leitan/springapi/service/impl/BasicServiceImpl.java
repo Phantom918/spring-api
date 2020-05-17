@@ -1,7 +1,7 @@
 package com.leitan.springapi.service.impl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.util.StringUtil;
 import com.leitan.springapi.dao.*;
 import com.leitan.springapi.entity.Permission;
 import com.leitan.springapi.entity.Role;
@@ -43,7 +43,9 @@ public class BasicServiceImpl implements BasicService {
 
     @Override
     public boolean addUser(User user) {
-        //DigestUtils.md5DigestAsHex(user.getPassword().getBytes())
+        if (StringUtil.isNotEmpty(user.getPassword())) {
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        }
         int count = userMapper.addUser(user);
         return count == 1;
     }
@@ -61,9 +63,9 @@ public class BasicServiceImpl implements BasicService {
     }
 
     @Override
-    public boolean deleteUser(Long id) {
-        int count = userMapper.deleteUser(id);
-        return count == 1;
+    public boolean deleteUsers(List<Long> ids) {
+        int count = userMapper.deleteUsers(ids);
+        return count == ids.size();
     }
 
     @Override
@@ -102,6 +104,9 @@ public class BasicServiceImpl implements BasicService {
 
     @Override
     public boolean updateUser(User user) {
+        if (StringUtil.isNotEmpty(user.getPassword())) {
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        }
         int count = userMapper.updateUser(user);
         return count == 1;
     }
@@ -130,9 +135,9 @@ public class BasicServiceImpl implements BasicService {
     }
 
     @Override
-    public Page<Role> selectRolesByPage(Integer pageNum, Integer pageSize, Role role) {
+    public List<Role> selectRolesByPage(Integer pageNum, Integer pageSize, Role role) {
         PageHelper.startPage(pageNum, pageSize);
-        Page<Role> roles = roleMapper.selectByRole(role);
+        List<Role> roles = roleMapper.selectByRole(role);
         for (int i = 0; i < roles.size(); i++) {
             List<User> users = userMapper.getUserByRoleId(roles.get(i).getId());
             roles.get(i).setUsers(users);
@@ -141,9 +146,14 @@ public class BasicServiceImpl implements BasicService {
     }
 
     @Override
-    public Page<Permission> selectPermissionsByPage(Integer pageNum, Integer pageSize, Permission permission) {
+    public List<Permission> selectPermissionsByPage(Integer pageNum, Integer pageSize, Permission permission) {
         PageHelper.startPage(pageNum, pageSize);
-        Page<Permission> permissions = permissionMapper.selectByPermission(permission);
+        List<Permission> permissions = permissionMapper.selectByPermission(permission);
         return permissions;
+    }
+
+    @Override
+    public int getUserCount(User user) {
+        return userMapper.getUserCount(user);
     }
 }
